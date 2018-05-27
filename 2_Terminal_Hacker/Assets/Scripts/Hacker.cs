@@ -5,7 +5,8 @@ using UnityEngine;
 public class Hacker : MonoBehaviour {
 
     // Game configuration data
-    string[] level1Passwords = { "table", "chair", "pencil", "mug", "mouse"};
+    const string menuHint = ("Type 'menu' at any time to return to main menu");
+    string[] level1Passwords = { "table", "chair", "pencil", "mug", "mouse", "poop"};
     string[] level2Passwords = { "magnetic", "massive", "keyboard", "speaker", "controller" };
     string[] level3Passwords = { "argonaut", "phylosophy", "explosion", "corsair", "impartial" };
 
@@ -43,8 +44,6 @@ public class Hacker : MonoBehaviour {
         
     }
 
-   
-
     void ShowMainMenu (string greeting)
     {
         currentScreen = Screen.MainMenu;
@@ -58,71 +57,118 @@ public class Hacker : MonoBehaviour {
         Terminal.WriteLine("Press 3 for   -   My dev server");
         Terminal.WriteLine(" ");
         Terminal.WriteLine("Enter your selection:");
+        Terminal.WriteLine(" ");
+        Terminal.WriteLine(menuHint);
     }
 
     void RunMainMenu(string input)
     {
-        if (input == "1")
+        bool isValidLevelNumber = (input == "1" || input == "2" || input == "3");
+        if (isValidLevelNumber)
         {
-            level = 1;
-            currentScreen = Screen.Password;
-            StartGame();
-        }
-        else if (input == "2")
-        {
-            level = 2;
-            currentScreen = Screen.Password;
-            StartGame();
-        }
-        else if (input == "3")
-        {
-            level = 3;
-            currentScreen = Screen.Password;
-            StartGame();
+            level = int.Parse(input);
+            AskForPassword();
         }
         else if (input == "load up celery man")
         {
-            Terminal.WriteLine("Certainly, Paul :) ");
+            Terminal.WriteLine("Yes, Paul :) "); // easter egg
         }
         else
         {
             Terminal.WriteLine("Please enter a valid selection");
+            Terminal.WriteLine(menuHint);
         }
     }
 
-    void StartGame()
+    void AskForPassword()
     {
-        if (level == 1)
+        currentScreen = Screen.Password;
+        Terminal.ClearScreen();
+        Terminal.WriteLine(menuHint);
+        SetRandomPassword();
+        Terminal.WriteLine("Enter your password: " + password.Anagram());
+    }
+
+    void SetRandomPassword()
+    {
+        switch (level)
         {
-            password = level1Passwords[0]; // todo: random number generator
+            case 1:
+                password = level1Passwords[Random.Range(0, level1Passwords.Length)];
+                break;
+            case 2:
+                password = level2Passwords[Random.Range(0, level2Passwords.Length)];
+                break;
+            case 3:
+                password = level3Passwords[Random.Range(0, level3Passwords.Length)];
+                break;
+            default:
+                Debug.LogError("Invalid level number");
+                break;
         }
-        else if (level == 2)
-        {
-            password = level2Passwords[0];
-        }
-        else if (level == 3)
-        {
-            password = level3Passwords[0];
-        }
-        Terminal.WriteLine("You chose level " + level);
-        Terminal.WriteLine("Please enter password");
     }
 
     void CheckPassword(string input)
     {
         if (input == password)
         {
-            currentScreen = Screen.Win;
-            Terminal.WriteLine("");
-            Terminal.WriteLine("Correct password!Congratulations");
-            Terminal.WriteLine("Hit enter to play again!");
+            DisplayWinScreen();
         }
         else
         {
-            Terminal.WriteLine("");
-            Terminal.WriteLine("Incorrect password!");
-            Terminal.WriteLine("You have infinite tries remaining!");
-            Terminal.WriteLine("Please enter password");
+            AskForPassword();
+        }
+    }
+
+    void DisplayWinScreen()
+    {
+        currentScreen = Screen.Win;
+        Terminal.ClearScreen();
+        ShowLevelReward();
+    }
+
+    void ShowLevelReward()
+    {
+        switch (level)
+        {
+            case 1:
+                Terminal.WriteLine("Correct password!Congratulations... just don't look at my search history :S");
+                Terminal.WriteLine(@"
+.______________
+| ___________ |
+| |         | |
+| |         | |
+| |_________| |
+|_____________|
+      ) (
+     |___|
+
+ /#######|     |
+/########|     0");
+                Terminal.WriteLine("Hit enter to play again!");
+                break;
+            case 2:
+                Terminal.WriteLine("Correct password!Congratulations... Here, have this controller! Be sure to get GAMEcare!");
+                Terminal.WriteLine(@"
+
+
+ _   _
+/*o o#\
+
+^ is that a controler?...");
+                Terminal.WriteLine("Hit enter to play again!");
+                break;
+            case 3:
+                Terminal.WriteLine("Correct password!Congratulations... All our dirty secrets");
+                Terminal.WriteLine(@"
+1010110001101100
+1010001 0010101010
+101010 0010101 1010
+1010010100 01010101
+01010100 10101010
+10010101010101010");
+                Terminal.WriteLine("Hit enter to play again!");
+                break;
         }
     }
 }
