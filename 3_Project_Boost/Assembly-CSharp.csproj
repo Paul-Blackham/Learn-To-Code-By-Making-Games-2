@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Oscillator.cs" />
     <Compile Include="Assets\Scripts\Rocket.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>D:/GitHub/Learn-To-Code-By-Making-Games-2/3_Project_Boost/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
