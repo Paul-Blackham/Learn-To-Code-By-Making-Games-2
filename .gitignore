@@ -21,9 +21,9 @@ $RECYCLE.BIN/
 # =========================
 # Operating System Files
 # =========================
-3_Project_Boost/Library
+5_Realm_Rush/Library
 *.bakert
-3_Project_Boost/Temp
+5_Realm_Rush/Temp
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
